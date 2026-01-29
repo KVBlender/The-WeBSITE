@@ -3,102 +3,60 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Inter", system-ui, sans-serif;
 }
 
 body {
-  min-height: 200vh;
   background-color: #ffffff;
-
-  /*background-image: url("images.jpg");*/
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
+  min-height: 300vh; 
+  font-family: "Inter", system-ui, sans-serif;
 }
 
-/* DOT GRID (Nothing-style) */
+/* ---- Z-INDEX LAYERING STRATEGY ---- */
 .dot-grid {
   position: fixed;
   inset: 0;
-  background-image: radial-gradient(#5e5e5e22 1px, transparent 1px);
-  background-size: 24px 24px;
+  background-image: radial-gradient(#5e5e5ea1 1px, transparent 1px);
+  background-size: 50px 50px;
   pointer-events: none;
-  z-index: 0;
+  z-index: 99; /* Top layer */
 }
 
-/* GLASS RECTANGLE */
-#glass-card {
+/* ---- MAIN FIXED HERO/HEADER CARD ---- */
+#main-header-card {
   position: fixed;
+  z-index: 50; 
+  
+  /* == UPDATED: FULL SCREEN WITH EQUAL PADDING == */
+  /* 1. Define the equal gap for all sides (responsive) */
+  --edge-gap: clamp(24px, 4vw, 48px);
 
-  /* Equal distance from all sides */
-  top: clamp(32px, 4vw, 64px);
-  left: clamp(32px, 4vw, 64px);
-  right: clamp(32px, 4vw, 64px);
-  bottom: clamp(32px, 4vw, 64px);
-
-  border-radius: 28px;
-
-  background: rgba(226, 196, 196, 0.08);
-  backdrop-filter: blur(18px);
-  opacity:50%;
-  -webkit-backdrop-filter: blur(18px) saturate(140%);
-  border: 1px solid rgba(255, 255, 255, 0.22);
-
-
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-
+  /* 2. Position using the gap */
+  top: var(--edge-gap);
+  left: var(--edge-gap);
+  right: var(--edge-gap);
+  
+  /* 3. Height is full viewport minus top gap and bottom gap */
+  height: calc(100vh - (var(--edge-gap) * 2));
+  
+  border-radius: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
 
-  transition:
-    top 1.2s cubic-bezier(0.22, 1, 0.36, 1),
-    left 1.2s cubic-bezier(0.22, 1, 0.36, 1),
-    right 1.2s cubic-bezier(0.22, 1, 0.36, 1),
-    bottom 1.2s cubic-bezier(0.22, 1, 0.36, 1),
-    border-radius 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  /* Glass Styles */
+  background: rgba(226, 196, 196, 0.08);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.2);
 
-  will-change: top, left, right, bottom;
-  z-index: 2;
+  /* Smooth transition for all changing properties */
+  transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: top, left, right, height, border-radius;
 }
 
-
-/* LOGO TEXT */
-.logo {
-  /*font-family: "Helvetica", "Inter", system-ui, sans-serif;
-  font-size: clamp(1rem, 2vw, 5.7rem);
-  font-weight: 500;
-  letter-spacing: 0.35em;
-  color: rgba(255, 255, 255, 0.92); */
-
-   font-family: "Doto", sans-serif;
-  
-  font-size: clamp(1rem, 2vw, 5.7rem);
-  font-weight: 300;
-  font-style: normal;
-  font-variation-settings:
-    "ROND" 100;
-}
-
-
-/* HEADER STATE */
-#glass-card.header {
-  top: 16px;
-  left: clamp(24px, 5vw, 64px);
-  right: clamp(24px, 5vw, 64px);
-  bottom: calc(100% - 80px);
-
-  border-radius: 20px;
-}
-
-/* SCROLL SPACER */
-.spacer {
-  height: 200vh;
-}
-
-/* GRAIN OVERLAY */
-#glass-card::after {
+/* Header Grain */
+#main-header-card::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -107,14 +65,147 @@ body {
   pointer-events: none;
   border-radius: inherit;
 }
-@media (max-aspect-ratio: 4/3) {
-  body {
-    background-position: center top;
-  }
+
+/* HEADER STATE (When Scrolled: Minimized) */
+#main-header-card.header-minimized {
+  /* This overrides the full screen vars above */
+  top: 16px;
+  left: 16px;
+  right: 16px;
+  height: 80px; /* Fixed height for header mode */
+  
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
-@media (min-aspect-ratio: 16/9) {
-  body {
-    background-position: center center;
+/* LOGO STYLES */
+.logo {
+  font-family: "Doto", sans-serif;
+  /* Increased max size slightly for the full screen effect */
+  font-size: clamp(2rem, 10vw, 8rem);
+  font-weight: 300;
+  font-variation-settings: "ROND" 100;
+  color: #1a1a1a;
+  transition: font-size 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#main-header-card.header-minimized .logo {
+   font-size: 2.5rem;
+}
+
+
+/* ---- CONTENT STREAM & SCROLL BLOCKS ---- */
+.content-stream {
+  position: relative;
+  z-index: 10; 
+}
+
+.scroll-block {
+  height: 150vh; 
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.sticky-wrapper {
+  position: sticky;
+  top: 120px; 
+  display: flex;
+  justify-content: center;
+  
+  opacity: 0.4;
+  transform: scale(0.95);
+  transition: all 0.8s ease;
+}
+
+.sticky-wrapper.is-active {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* ---- 1. TEXT CONTAINER ---- */
+.text-container {
+  background: rgba(226, 196, 196, 0.15);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  border-radius: 24px;
+  position: relative;
+  overflow: hidden;
+
+  width: 100%;
+  max-width: 700px;
+  padding: 4rem;
+  color: #333;
+  margin: 0 20px;
+}
+
+.text-container::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+  opacity: 0.1;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.text-container h2 {
+    font-family: "Doto", sans-serif;
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+.text-container p {
+    font-size: 1.2rem;
+    line-height: 1.6;
+}
+
+/* ---- 2. IMAGE CONTAINER ---- */
+.image-container {
+  background: rgba(226, 196, 196, 0.15);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  border-radius: 24px;
+  position: relative;
+  overflow: hidden;
+
+  /* Sizing: 75% of viewport width */
+  width: 75vw;
+  aspect-ratio: 16/9; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px; 
+}
+
+.image-container::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+  opacity: 0.1;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px; 
+}
+
+/* ---- MOBILE ADJUSTMENTS ---- */
+@media (max-width: 768px) {
+  .image-container {
+     width: calc(100% - 32px); 
+     aspect-ratio: 4/3; 
+     margin: 0 auto;
+  }
+  
+  .text-container {
+     padding: 2rem; 
   }
 }
