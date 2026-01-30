@@ -15,8 +15,8 @@ body {
 .dot-grid {
   position: fixed;
   inset: 0;
-  background-image: radial-gradient(#5e5e5ea1 1px, transparent 1px);
-  background-size: 50px 50px;
+  background-image: radial-gradient(#5e5e5ea1 1.4px, transparent 1.4px);
+  background-size: 70px 70px;
   pointer-events: none;
   z-index: 99; /* Top layer */
 }
@@ -44,7 +44,7 @@ body {
   justify-content: center;
 
   /* Glass Styles */
-  background: rgba(226, 196, 196, 0.08);
+  background: rgba(167, 184, 188, 0.15);
   backdrop-filter: blur(18px) saturate(140%);
   -webkit-backdrop-filter: blur(18px) saturate(140%);
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -124,7 +124,7 @@ body {
 
 /* ---- 1. TEXT CONTAINER ---- */
 .text-container {
-  background: rgba(226, 196, 196, 0.15);
+  background: rgba(167, 184, 188, 0.15);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.4);
@@ -162,7 +162,7 @@ body {
 
 /* ---- 2. IMAGE CONTAINER ---- */
 .image-container {
-  background: rgba(226, 196, 196, 0.15);
+  background: rgba(167, 184, 188, 0.15);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.4);
