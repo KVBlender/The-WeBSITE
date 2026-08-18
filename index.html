@@ -15,11 +15,31 @@
 
   <div id="main-header-card">
     <span class="logo">KaBEER</span>
+    
+<div class="scroll-indicator" id="scrollIndicator"></div>
   </div>
+  
 
   <div class="content-stream">
     
     <div style="height: 100vh;"></div>
+</div>
+
+ <!-- COMBINED BLOCK: photo + text side by side, one scroll -->
+    <section class="scroll-block">
+      <div class="sticky-wrapper combined">
+
+        <div class="image-container" style="--img-ratio: 3/4;">
+           <img src="images/IMG_0912.jpg" alt="me">
+        </div>
+
+        <div class="text-container">
+           <h2>This is Kabeer</h2>
+           <p>placeholder text or sm shit boiiii</p>
+        </div>
+
+      </div>
+    </section>
 
     <section class="scroll-block">
       <div class="sticky-wrapper">
@@ -33,10 +53,10 @@
     </section>
 
     <section class="scroll-block">
-      <div class="sticky-wrapper">
+      <div class="sticky-wrapper" >
         
-        <div class="image-container">
-           <img src="1000071059.jpg" alt="Lamp post">
+        <div class="image-container" style="min-width: 90vw;">
+           <img src="images/IMG_6963.JPG" alt="Lamp post">
         </div>
 
       </div>
@@ -56,8 +76,8 @@
      <section class="scroll-block">
       <div class="sticky-wrapper">
         
-        <div class="image-container">
-           <img src="1000030540.jpg" alt="Sky on Guard">
+        <div class="image-container" style="min-width: 90vw;">
+           <img src="images/IMG_7074.JPG" alt="Sky on Guard">
         </div>
 
       </div>
@@ -65,7 +85,7 @@
 
     <div style="height: 50vh;"></div>
 
-  </div>
+  
 
   <script src="script.js"></script>
 </body>
