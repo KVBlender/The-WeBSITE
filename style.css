@@ -9,13 +9,24 @@ body {
   background-color: #ffffff;
   min-height: 300vh; 
   font-family: "Inter", system-ui, sans-serif;
+  background-image: url('images/IMG_7082.JPG'); /* or a gradient, or just a color */
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed; /* this is the key part — it won't scroll with content */
+
 }
 
+background{
+
+  min-height: 100vh;
+  
+
+}
 /* ---- Z-INDEX LAYERING STRATEGY ---- */
 .dot-grid {
   position: fixed;
   inset: 0;
-  background-image: radial-gradient(#5e5e5ea1 1.4px, transparent 1.4px);
+  background-image: radial-gradient(#000000e1 1.4px, transparent 1.4px);
   background-size: 70px 70px;
   pointer-events: none;
   z-index: 99; /* Top layer */
@@ -85,7 +96,7 @@ body {
   font-size: clamp(2rem, 10vw, 8rem);
   font-weight: 300;
   font-variation-settings: "ROND" 100;
-  color: #1a1a1a;
+  color: #f4f4f4;
   transition: font-size 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -132,11 +143,18 @@ body {
   border-radius: 24px;
   position: relative;
   overflow: hidden;
+  min-width: var(--text-min-height, 600px);
 
-  width: 100%;
-  max-width: 700px;
-  padding: 4rem;
-  color: #333;
+  /* HORIZONTAL size: controlled by --text-width (or max-width) */
+  width: var(--text-width, 100%);
+  max-width: var(--text-max-width, 90vw);
+
+  /* VERTICAL size: controlled by --text-height. Default is "auto" (grows with content) */
+  height: var(--text-height, auto);
+  min-height: var(--text-min-height, 0px);
+
+  padding: var(--text-padding, 4rem);
+  color: #f4f4f4;
   margin: 0 20px;
 }
 
@@ -171,13 +189,18 @@ body {
   position: relative;
   overflow: hidden;
 
-  /* Sizing: 75% of viewport width */
-  width: 75vw;
-  aspect-ratio: 16/9; 
+  /* HORIZONTAL size: controlled by --img-width */
+  width: var(--img-width, 75vw);
+  
+
+  /* VERTICAL size: controlled by --img-ratio (width:height) OR override with --img-height directly */
+  aspect-ratio: var(--img-ratio, 16/9);
+  height: var(--img-height, auto);
+
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px; 
+  padding: var(--img-padding, 20px);
 }
 
 .image-container::after {
@@ -197,6 +220,56 @@ body {
   border-radius: 16px; 
 }
 
+/* ---- COMBINED (PHOTO + TEXT, SIDE BY SIDE) ---- */
+/* Add class="sticky-wrapper combined" to pair an .image-container and
+   a .text-container inside the SAME .scroll-block. Scroll length stays
+   whatever .scroll-block's height is (150vh) — this only changes the
+   inner layout, not the scroll distance. */
+.sticky-wrapper.combined {
+  flex-direction: row;
+  align-items: stretch;      /* both containers match height automatically */
+  justify-content: center;
+  gap: var(--combo-gap, 40px);
+  width: 100%;
+  max-width: var(--combo-max-width, 1100px);
+  margin: 0 auto;
+}
+
+/* Inside a combined pair, containers shed their solo-mode width rules
+   and instead split the row. The photo drives its own aspect-ratio;
+   since align-items:stretch forces the text box to match the photo's
+   height, the pairing "adapts" automatically whether the photo is
+   landscape (short/wide) or portrait (tall/narrow) — no extra classes
+   needed per orientation. */
+.sticky-wrapper.combined .image-container {
+  flex: 0 0 auto;
+  width: var(--img-width, 45%);
+  margin: 0;
+}
+
+.sticky-wrapper.combined .text-container {
+  flex: 1 1 auto;
+  width: auto;
+  max-width: none;
+  height: auto;              /* stretched by align-items instead */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0;
+}
+
+/* Stack instead of side-by-side on narrow screens */
+@media (max-width: 900px) {
+  .sticky-wrapper.combined {
+    flex-direction: column;
+    align-items: center;
+  }
+  .sticky-wrapper.combined .image-container,
+  .sticky-wrapper.combined .text-container {
+    width: 100%;
+  }
+}
+
 /* ---- MOBILE ADJUSTMENTS ---- */
 @media (max-width: 768px) {
   .image-container {
@@ -209,3 +282,25 @@ body {
      padding: 2rem; 
   }
 }
+
+
+/* scroll incdicator*/
+.scroll-indicator {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 28px;
+  height: 28px;
+  border-right: 2px solid #ffffff;
+  border-bottom: 2px solid #ffffff;
+  opacity: 0.8;
+  transition: opacity 0.4s ease;
+  cursor: pointer;
+}
+
+.scroll-indicator.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
