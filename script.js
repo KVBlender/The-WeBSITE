@@ -42,3 +42,13 @@ const observer = new IntersectionObserver(observerCallback, observerOptions);
 stickyWrappers.forEach(wrapper => {
   observer.observe(wrapper);
 });
+
+const indicator = document.getElementById('scrollIndicator');
+
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 10) {
+    indicator.classList.add('hidden');
+  } else {
+    indicator.classList.remove('hidden');
+  }
+});
